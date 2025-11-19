@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++代码分享平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a192f',
+                        secondary: '#64ffda',
+                        accent: '#112240',
+                        light: '#e6f1ff',
+                        dark: '#020c1b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .glass {
+                background: rgba(10, 25, 47, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(100, 255, 218, 0.1);
+            }
+            .gradient-text {
+                background: linear-gradient(90deg, #64ffda, #a8fff0);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            }
+            .code-block {
+                position: relative;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
+            }
+            .code-header {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                background: #1e293b;
+                border-bottom: 1px solid #334155;
+            }
+            .code-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 6px;
+            }
+            .code-dot-red {
+                background: #ef4444;
+            }
+            .code-dot-yellow {
+                background: #f59e0b;
+            }
+            .code-dot-green {
+                background: #22c55e;
+            }
+            .copy-button {
+                margin-left: auto;
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.25rem;
+                background: #334155;
+                color: #e2e8f0;
+                font-size: 0.75rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .copy-button:hover {
+                background: #475569;
+            }
+            .copy-button.copied {
+                background: #22c55e;
+                color: white;
+            }
+            .hidden-page {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(10, 25, 47, 0.95);
+                z-index: 50;
+                overflow-y: auto;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            .bg-animation {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                z-index: -1;
+            }
+            .bg-animation li {
+                position: absolute;
+                display: block;
+                list-style: none;
+                background: rgba(100, 255, 218, 0.1);
+                animation: animate 25s linear infinite;
+                bottom: -150px;
+                border-radius: 50%;
+            }
+            @keyframes animate {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0.5;
+                    border-radius: 50%;
+                }
+                100% {
+                    transform: translateY(-1000px) rotate(720deg);
+                    opacity: 0;
+                    border-radius: 50%;
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-primary text-light min-h-screen flex flex-col">
+    <!-- Background Animation -->
+    <ul class="bg-animation">
+        <li style="left: 25%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 18s;"></li>
+        <li style="left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s;"></li>
+        <li style="left: 70%; width: 20px; height: 20px; animation-delay: 4s; animation-duration: 10s;"></li>
+        <li style="left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 15s;"></li>
+        <li style="left: 65%; width: 20px; height: 20px; animation-delay: 0s; animation-duration: 11s;"></li>
+        <li style="left: 75%; width: 110px; height: 110px; animation-delay: 3s; animation-duration: 20s;"></li>
+        <li style="left: 35%; width: 150px; height: 150px; animation-delay: 7s; animation-duration: 25s;"></li>
+        <li style="left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 35s;"></li>
+        <li style="left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 40s;"></li>
+        <li style="left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 25s;"></li>
+    </ul>
+
+    <!-- Main Content -->
+    <div id="main-page" class="flex flex-col min-h-screen">
+        <!-- Header with Time -->
+        <header class="glass py-4 px-6 md:px-12">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center">
+                    <i class="fa fa-code text-secondary text-2xl mr-3"></i>
+                    <h1 class="text-xl md:text-2xl font-bold gradient-text">C++代码分享平台</h1>
+                </div>
+                <div id="current-time" class="text-sm md:text-base font-mono"></div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow container mx-auto py-8 px-4 md:px-8">
+            <div class="max-w-5xl mx-auto">
+                <!-- Welcome Section -->
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-shadow">欢迎来到C++代码分享平台</h2>
+                    <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                        这里收集了各种C++代码，帮助你学习和提升编程技能。
+                        点击下方代码卡片查看详细实现。
+                    </p>
+                </div>
+                
+                <!-- Admin Message -->
+                <div class="glass rounded-lg p-6 mb-8">
+                    <div class="flex items-start">
+                        <div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa fa-user-circle text-primary text-3xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <h3 class="text-xl font-semibold">站长留言</h3>
+                                <span class="ml-3 text-xs bg-secondary bg-opacity-20 text-secondary px-2 py-1 rounded">官方</span>
+                            </div>
+                            <p class="text-gray-300 leading-relaxed">
+                                欢迎来到C++代码分享平台！这里是一个专注于C++编程技术的社区，我们致力于分享高质量的代码示例和技术文章。
+                                无论你是初学者还是资深开发者，都能在这里找到有价值的资源。如果你有任何问题或建议，欢迎联系我们。
+                                让我们一起学习、分享、成长！
+                            </p>
+                            <div class="mt-4 flex items-center text-sm text-gray-400">
+                                <span>Command_Stone · 2025-11-20</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="glass rounded-lg p-6 mb-8">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-grow">
+                            <div class="relative">
+                                <input type="text" id="search-input" placeholder="搜索代码..." 
+                                    class="w-full pl-10 pr-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                                <i class="fa fa-search absolute left-3 top-3 text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-category" class="px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                                <option value="all">所有分类</option>
+                                <option value="data-structure">数据结构</option>
+                                <option value="algorithm">算法</option>
+                                <option value="basic">基础语法</option>
+                                <option value="advanced">高级特性</option>
+                            </select>
+                            <button id="filter-button" class="px-4 py-2 bg-secondary text-dark font-semibold rounded-md hover:bg-opacity-90 transition-colors duration-300">
+                                筛选
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Code Cards Grid -->
+                <div id="code-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Code cards will be dynamically generated here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="glass py-6 px-4">
+            <div class="container mx-auto text-center">
+                <p id="copyright" class="text-sm md:text-base text-gray-400 cursor-pointer hover:text-secondary transition-colors duration-300">
+                    CST协会代码分享平台 | 2025
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    <i class="fa fa-code-fork mr-1"></i> 分享知识，共同进步
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden Page -->
+    <div id="hidden-page" class="hidden-page">
+        <div class="container mx-auto px-4 py-12 max-w-4xl">
+            <div class="glass rounded-lg p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold gradient-text">CST协会成员区</h2>
+                    <button id="close-hidden" class="text-gray-400 hover:text-white">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-secondary">欢迎访问隐藏区域</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        这里是CST协会的内部成员区域。在这里，我们分享最新的C++技术动态、
+                        算法研究成果和项目开发经验。如果你是协会成员，请登录以获取更多资源。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="glass rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fa fa-calendar-check-o text-secondary mr-2"></i>
+                            近期活动
+                        </h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">11月25日</span>
+                                <span>cstII人员级特性研讨会</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">12月10日</span>
+                                <span>CST交流网站制作</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">12月20日</span>
+                                <span>项目开发分享会</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fa fa-book text-secondary mr-2"></i>
+                            推荐资源
+                        </h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-center">
+                                <i class="fa fa-file-pdf-o text-red-400 mr-2"></i>
+                                <span>极域课堂杀手</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-file-code-o text-green-400 mr-2"></i>
+                                <span>数据结构与算法库</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-link text-blue-400 mr-2"></i>
+                                <span>编程学习平台</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg p-6">
+                    <h4 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fa fa-users text-secondary mr-2"></i>
+                        成员登录[内测]
+                    </h4>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-300 mb-1">用户名</label>
+                            <input type="text" id="username" class="w-full px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-300 mb-1">密码</label>
+                            <input type="password" id="password" class="w-full px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                        </div>
+                        <button type="button" class="w-full bg-secondary text-dark font-semibold py-2 px-4 rounded-md hover:bg-opacity-90 transition-colors duration-300">
+                            登录
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Code data storage
+        const codeData = [
+            {
+                id: 1,
+                title: "二叉搜索树实现",
+                author: "编程爱好者",
+                date: "2025-11-19",
+                category: "data-structure",
+                description: "一个完整的二叉搜索树实现，包含插入、中序遍历、计算高度和打印树结构等功能。",
+                code: `#include <iostream>
+#include <iomanip>
+using namespace std;
+
+// 二叉树节点结构
+class TreeNode {
+public:
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+// 二叉搜索树类
+class BinarySearchTree {
+private:
+    TreeNode* root;
+    
+    // 递归插入节点
+    TreeNode* insertNode(TreeNode* node, int val) {
+        if (!node) return new TreeNode(val);
+        
+        if (val < node->val) {
+            node->left = insertNode(node->left, val);
+        } else if (val > node->val) {
+            node->right = insertNode(node->right, val);
+        }
+        
+        // 如果值已存在，则不插入（避免重复）
+        return node;
+    }
+    
+    // 中序遍历（递归）
+    void inorderTraversal(TreeNode* node) {
+        if (!node) return;
+        
+        inorderTraversal(node->left);
+        cout << node->val << " ";
+        inorderTraversal(node->right);
+    }
+    
+    // 计算树的高度
+    int getHeight(TreeNode* node) {
+        if (!node) return 0;
+        return max(getHeight(node->left), getHeight(node->right)) + 1;
+    }
+    
+    // 打印树的结构
+    void printTree(TreeNode* node, int space) {
+        if (!node) return;
+        
+        space += 10;
+        
+        // 先打印右子树
+        printTree(node->right, space);
+        
+        // 打印当前节点
+        cout << endl;
+        for (int i = 10; i < space; i++)
+            cout << " ";
+        cout << node->val << "\n";
+        
+        // 打印左子树
+        printTree(node->left, space);
+    }
+    
+    // 销毁树
+    void destroyTree(TreeNode* node) {
+        if (!node) return;
+        
+        destroyTree(node->left);
+        destroyTree(node->right);
+        delete node;
+    }
+    
+public:
+    // 构造函数
+    BinarySearchTree() : root(nullptr) {}
+    
+    // 析构函数
+    ~BinarySearchTree() {
+        destroyTree(root);
+    }
+    
+    // 插入值
+    void insert(int val) {
+        root = insertNode(root, val);
+    }
+    
+    // 中序遍历
+    void inorder() {
+        cout << "中序遍历: ";
+        inorderTraversal(root);
+        cout << endl;
+    }
+    
+    // 获取树的高度
+    int height() {
+        return getHeight(root);
+    }
+    
+    // 打印树的结构
+    void print() {
+        cout << "树的结构:\\n";
+        printTree(root, 0);
+        cout << endl;
+    }
+};
+
+// 测试函数
+int main() {
+    BinarySearchTree bst;
+    
+    // 插入一些值
+    bst.insert(50);
+    bst.insert(30);
+    bst.insert(20);
+    bst.insert(40);
+    bst.insert(70);
+    bst.insert(60);
+    bst.insert(80);
+    
+    // 显示中序遍历结果（应该是有序的）
+    bst.inorder();
+    
+    // 显示树的高度
+    cout << "树的高度: " << bst.height() << endl;
+    
+    // 打印树的结构
+    bst.print();
+    
+    return 0;
+}`
+            },
+            {
+                id: 2,
+                title: "Dijkstra最短路径算法",
+                author: "算法专家",
+                date: "2025-11-18",
+                category: "algorithm",
+                description: "使用优先队列实现的Dijkstra最短路径算法，适用于无负权边的图。",
+                code: `#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+
+const int INF = INT_MAX;
+
+void dijkstra(int start, const vector<vector<pair<int, int>>>& graph, vector<int>& distance) {
+    int n = graph.size();
+    distance.assign(n, INF);
+    distance[start] = 0;
+    
+    // 优先队列：(距离, 节点)，按距离从小到大排序
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    pq.push({0, start});
+    
+    while (!pq.empty()) {
+        int currentDist = pq.top().first;
+        int currentNode = pq.top().second;
+        pq.pop();
+        
+        // 如果当前距离大于已知最短距离，则跳过
+        if (currentDist > distance[currentNode]) continue;
+        
+        // 遍历当前节点的所有邻居
+        for (auto& edge : graph[currentNode]) {
+            int nextNode = edge.first;
+            int weight = edge.second;
+            
+            // 松弛操作
+            if (distance[currentNode] + weight < distance[nextNode]) {
+                distance[nextNode] = distance[currentNode] + weight;
+                pq.push({distance[nextNode], nextNode});
+            }
+        }
+    }
+}
+
+int main() {
+    // 图的邻接表表示
+    vector<vector<pair<int, int>>> graph = {
+        {{1, 4}, {2, 1}},    // 节点0连接到1(权重4)和2(权重1)
+        {{3, 1}},            // 节点1连接到3(权重1)
+        {{1, 2}, {3, 5}},    // 节点2连接到1(权重2)和3(权重5)
+        {}                   // 节点3没有出边
+    };
+    
+    vector<int> distance;
+    int startNode = 0;
+    dijkstra(startNode, graph, distance);
+    
+    // 输出从起点到各节点的最短距离
+    cout << "从节点" << startNode << "到各节点的最短距离:\\n";
+    for (int i = 0; i < distance.size(); ++i) {
+        if (distance[i] == INF) {
+            cout << "节点" << i << ": 不可达\\n";
+        } else {
+            cout << "节点" << i << ": " << distance[i] << "\\n";
+        }
+    }
+    
+    return 0;
+}`
+            },
+            {
+                id: 3,
+                title: "0/1背包问题动态规划",
+                author: "动态规划爱好者",
+                date: "2025-11-17",
+                category: "algorithm",
+                description: "使用动态规划解决0/1背包问题，找出在给定容量下能装入背包的最大价值。",
+                code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int knapsack(int W, const vector<int>& weight, const vector<int>& value, int n) {
+    // 创建二维数组dp，dp[i][w]表示前i个物品在容量为w时的最大价值
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
+    
+    for (int i = 1; i <= n; ++i) {
+        for (int w = 1; w <= W; ++w) {
+            // 如果当前物品重量大于背包容量，则不选该物品
+            if (weight[i - 1] > w) {
+                dp[i][w] = dp[i - 1][w];
+            } else {
+                // 否则，选择最大值：不选当前物品或选当前物品
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weight[i - 1]] + value[i - 1]);
+            }
+        }
+    }
+    
+    return dp[n][W];
+}
+
+// 回溯找出选择的物品
+void findSelectedItems(int W, const vector<int>& weight, const vector<int>& value, int n) {
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
+    
+    // 先计算dp数组
+    for (int i = 1; i <= n; ++i) {
+        for (int w = 1; w <= W; ++w) {
+            if (weight[i - 1] > w) {
+                dp[i][w] = dp[i - 1][w];
+            } else {
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weight[i - 1]] + value[i - 1]);
+            }
+        }
+    }
+    
+    // 回溯找出选择的物品
+    int remainingWeight = W;
+    vector<bool> selected(n, false);
+    
+    for (int i = n; i > 0; --i) {
+        // 如果当前物品被选中
+        if (dp[i][remainingWeight] != dp[i - 1][remainingWeight]) {
+            selected[i - 1] = true;
+            remainingWeight -= weight[i - 1];
+        }
+    }
+    
+    // 输出选择的物品
+    cout << "选择的物品: ";
+    for (int i = 0; i < n; ++i) {
+        if (selected[i]) {
+            cout << i + 1 << " ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int W = 50; // 背包容量
+    vector<int> weight = {10, 20, 30}; // 物品重量
+    vector<int> value = {60, 100, 120}; // 物品价值
+    int n = weight.size(); // 物品数量
+    
+    int maxValue = knapsack(W, weight, value, n);
+    cout << "背包的最大价值: " << maxValue << endl;
+    
+    findSelectedItems(W, weight, value, n);
+    
+    return 0;
+}`
+            },
+            {
+                id: 4,
+                title: "快速排序算法",
+                author: "排序专家",
+                date: "2025-11-16",
+                category: "algorithm",
+                description: "经典的快速排序算法实现，使用分治法策略，平均时间复杂度为O(n log n)。",
+                code: `#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+// 交换两个元素
+void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+// 分区函数：选择最后一个元素作为 pivot
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high]; // pivot
+    int i = (low - 1); // 小于 pivot 的元素的索引
+    
+    for (int j = low; j <= high - 1; ++j) {
+        // 如果当前元素小于或等于 pivot
+        if (arr[j] <= pivot) {
+            ++i; // 增加小于 pivot 区域的索引
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+// 随机分区函数：随机选择 pivot，避免最坏情况
+int randomPartition(vector<int>& arr, int low, int high) {
+    // 生成 [low, high] 范围内的随机索引
+    srand(time(nullptr));
+    int randomIndex = low + rand() % (high - low + 1);
+    
+    // 将随机选择的 pivot 与最后一个元素交换
+    swap(arr[randomIndex], arr[high]);
+    
+    return partition(arr, low, high);
+}
+
+// 快速排序函数
+void quickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        // pi 是分区索引，arr[pi] 现在位于正确的位置
+        int pi = randomPartition(arr, low, high);
+        
+        // 分别对 pivot 左右两边的子数组进行排序
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// 打印数组
+void printArray(const vector<int>& arr) {
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> arr = {10, 7, 8, 9, 1, 5};
+    int n = arr.size();
+    
+    cout << "排序前的数组: ";
+    printArray(arr);
+    
+    quickSort(arr, 0, n - 1);
+    
+    cout << "排序后的数组: ";
+    printArray(arr);
+    
+    return 0;
+}`
+            },
+            {
+                id: 5,
+                title: "C++智能指针示例",
+                author: "现代C++爱好者",
+                date: "2025-11-15",
+                category: "advanced",
+                description: "C++11及以上标准中的智能指针使用示例，包括unique_ptr、shared_ptr和weak_ptr。",
+                code: `#include <iostream>
+#include <memory>
+#include <vector>
+
+class MyClass {
+private:
+    int value;
+public:
+    MyClass(int val) : value(val) {
+        std::cout << "MyClass 构造函数调用，值: " << value << std::endl;
+    }
+    
+    ~MyClass() {
+        std::cout << "MyClass 析构函数调用，值: " << value << std::endl;
+    }
+    
+    void doSomething() {
+        std::cout << "MyClass 正在执行操作，值: " << value << std::endl;
+    }
+    
+    int getValue() const { return value; }
+};
+
+// unique_ptr 示例
+void uniquePtrExample() {
+    std::cout << "\\n--- unique_ptr 示例 ---" << std::endl;
+    
+    // 创建 unique_ptr
+    std::unique_ptr<MyClass> ptr1 = std::make_unique<MyClass>(10);
+    ptr1->doSomething();
+    
+    // unique_ptr 不能复制，只能移动
+    std::unique_ptr<MyClass> ptr2 = std::move(ptr1);
+    
+    if (!ptr1) {
+        std::cout << "ptr1 现在为空" << std::endl;
+    }
+    
+    if (ptr2) {
+        ptr2->doSomething();
+    }
+    
+    // 不需要手动删除，析构函数会自动调用
+}
+
+// shared_ptr 示例
+void sharedPtrExample() {
+    std::cout << "\\n--- shared_ptr 示例 ---" << std::endl;
+    
+    // 创建 shared_ptr
+    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>(20);
+    std::cout << "引用计数: " << ptr1.use_count() << std::endl;
+    
+    // shared_ptr 可以复制
+    std::shared_ptr<MyClass> ptr2 = ptr1;
+    std::cout << "复制后引用计数: " << ptr1.use_count() << std::endl;
+    
+    {
+        std::shared_ptr<MyClass> ptr3 = ptr1;
+        std::cout << "作用域内引用计数: " << ptr1.use_count() << std::endl;
+        ptr3->doSomething();
+    }
+    
+    std::cout << "作用域外引用计数: " << ptr1.use_count() << std::endl;
+    
+    ptr1->doSomething();
+    ptr2->doSomething();
+    
+    // 当最后一个 shared_ptr 销毁时，对象才会被删除
+}
+
+// weak_ptr 示例
+void weakPtrExample() {
+    std::cout << "\\n--- weak_ptr 示例 ---" << std::endl;
+    
+    std::shared_ptr<MyClass> sharedPtr = std::make_shared<MyClass>(30);
+    std::weak_ptr<MyClass> weakPtr = sharedPtr;
+    
+    std::cout << "shared_ptr 引用计数: " << sharedPtr.use_count() << std::endl;
+    std::cout << "weak_ptr 引用计数: " << weakPtr.use_count() << std::endl;
+    
+    // weak_ptr 需要先转换为 shared_ptr 才能使用
+    if (auto tempPtr = weakPtr.lock()) {
+        tempPtr->doSomething();
+        std::cout << "转换后的引用计数: " << tempPtr.use_count() << std::endl;
+    } else {
+        std::cout << "对象已被销毁" << std::endl;
+    }
+    
+    // 当 shared_ptr 销毁后，weak_ptr 无法再访问对象
+    sharedPtr.reset();
+    
+    if (auto tempPtr = weakPtr.lock()) {
+        tempPtr->doSomething();
+    } else {
+        std::cout << "对象已被销毁" << std::endl;
+    }
+}
+
+// 智能指针数组示例
+void smartPtrArrayExample() {
+    std::cout << "\\n--- 智能指针数组示例 ---" << std::endl;
+    
+    // unique_ptr 可以管理数组
+    std::unique_ptr<MyClass[]> arrPtr = std::make_unique<MyClass[]>(3);
+    
+    for (int i = 0; i < 3; ++i) {
+        arrPtr[i].doSomething();
+    }
+    
+    // shared_ptr 管理数组需要指定删除器
+    std::shared_ptr<MyClass> sharedArrPtr = std::shared_ptr<MyClass>(
+        new MyClass[3], 
+        [](MyClass* p) { delete[] p; }
+    );
+}
+
+int main() {
+    uniquePtrExample();
+    sharedPtrExample();
+    weakPtrExample();
+    smartPtrArrayExample();
+    
+    std::cout << "\\n--- 主函数结束 ---" << std::endl;
+    return 0;
+}`
+            },
+            {
+                id: 6,
+                title: "C++基础语法示例",
+                author: "编程入门者",
+                date: "2025-11-14",
+                category: "basic",
+                description: "C++基础语法示例，包括变量、函数、类、循环和条件语句等基本概念。",
+                code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+// 函数示例：计算两个数的和
+int add(int a, int b) {
+    return a + b;
+}
+
+// 函数示例：计算阶乘
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+// 类示例
+class Person {
+private:
+    std::string name;
+    int age;
+public:
+    // 构造函数
+    Person(std::string n, int a) : name(n), age(a) {}
+    
+    // 成员函数
+    void introduce() {
+        std::cout << "大家好，我叫" << name << "，今年" << age << "岁。" << std::endl;
+    }
+    
+    // Getter 和 Setter
+    std::string getName() const { return name; }
+    int getAge() const { return age; }
+    void setAge(int a) { age = a; }
+};
+
+// 模板函数示例
+template <typename T>
+T maxValue(T a, T b) {
+    return (a > b) ? a : b;
+}
+
+int main() {
+    // 基本变量和输入输出
+    std::cout << "Hello, C++!" << std::endl;
+    
+    int num1 = 10;
+    double num2 = 3.14;
+    std::string str = "C++编程";
+    
+    std::cout << "整数: " << num1 << std::endl;
+    std::cout << "浮点数: " << num2 << std::endl;
+    std::cout << "字符串: " << str << std::endl;
+    
+    // 条件语句
+    if (num1 > 5) {
+        std::cout << num1 << " 大于 5" << std::endl;
+    } else {
+        std::cout << num1 << " 小于等于 5" << std::endl;
+    }
+    
+    // 循环语句
+    std::cout << "循环输出 1 到 5: ";
+    for (int i = 1; i <= 5; ++i) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+    
+    // 数组和向量
+    int arr[] = {1, 2, 3, 4, 5};
+    std::vector<int> vec = {6, 7, 8, 9, 10};
+    
+    std::cout << "数组元素: ";
+    for (int i = 0; i < 5; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+    
+    std::cout << "向量元素: ";
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    
+    // 函数调用
+    int sum = add(3, 5);
+    std::cout << "3 + 5 = " << sum << std::endl;
+    
+    int fact = factorial(5);
+    std::cout << "5 的阶乘是: " << fact << std::endl;
+    
+    // 对象和类
+    Person person("张三", 25);
+    person.introduce();
+    person.setAge(26);
+    std::cout << person.getName() << " 现在 " << person.getAge() << " 岁。" << std::endl;
+    
+    // 模板函数
+    std::cout << "max(10, 20) = " << maxValue(10, 20) << std::endl;
+    std::cout << "max(3.14, 2.71) = " << maxValue(3.14, 2.71) << std::endl;
+    std::cout << "max(\"apple\", \"banana\") = " << maxValue(std::string("apple"), std::string("banana")) << std::endl;
+    
+    return 0;
+}`
+            }
+        ];
+        
+        // Save code data to localStorage
+        function saveCodeDataToLocalStorage() {
+            localStorage.setItem('codeData', JSON.stringify(codeData));
+        }
+        
+        // Load code data from localStorage
+        function loadCodeDataFromLocalStorage() {
+            const savedData = localStorage.getItem('codeData');
+            return savedData ? JSON.parse(savedData) : [];
+        }
+        
+        // Initialize code highlighting and other functions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Save code data to localStorage
+            saveCodeDataToLocalStorage();
+            
+            // Generate code cards
+            generateCodeCards(codeData);
+            
+            // Add event listeners
+            document.getElementById('filter-button').addEventListener('click', filterCodeCards);
+            document.getElementById('search-input').addEventListener('input', filterCodeCards);
+            document.getElementById('copyright').addEventListener('click', toggleHiddenPage);
+            document.getElementById('close-hidden').addEventListener('click', toggleHiddenPage);
+            
+            // Update time
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+        
+        // Generate code cards dynamically
+        function generateCodeCards(data) {
+            const codeCardsContainer = document.getElementById('code-cards');
+            codeCardsContainer.innerHTML = '';
+            
+            if (data.length === 0) {
+                codeCardsContainer.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fa fa-search text-4xl mb-4"></i><p>没有找到匹配的代码示例</p></div>';
+                return;
+            }
+            
+            data.forEach(code => {
+                const card = document.createElement('div');
+                card.className = 'glass rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => navigateToCodePage(code.id);
+                
+                // Get category name
+                const categoryNames = {
+                    'data-structure': '数据结构',
+                    'algorithm': '算法',
+                    'basic': '基础语法',
+                    'advanced': '高级特性'
+                };
+                
+                card.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold mb-2">${code.title}</h3>
+                            <span class="text-xs bg-secondary bg-opacity-20 text-secondary px-2 py-1 rounded">${categoryNames[code.category] || code.category}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4 line-clamp-2">${code.description}</p>
+                        <div class="flex justify-between items-center text-xs text-gray-400">
+                            <span><i class="fa fa-user-circle mr-1"></i> ${code.author}</span>
+                            <span><i class="fa fa-calendar mr-1"></i> ${code.date}</span>
+                        </div>
+                    </div>
+                    <div class="bg-accent bg-opacity-50 px-6 py-3 flex justify-between items-center">
+                        <span class="text-sm font-mono text-gray-300">查看详情</span>
+                        <i class="fa fa-arrow-right text-secondary"></i>
+                    </div>
+                `;
+                
+                codeCardsContainer.appendChild(card);
+            });
+        }
+        
+        // Filter code cards based on search and category
+        function filterCodeCards() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const categoryFilter = document.getElementById('filter-category').value;
+            
+            const filteredData = codeData.filter(code => {
+                const matchesSearch = code.title.toLowerCase().includes(searchTerm) || 
+                                     code.description.toLowerCase().includes(searchTerm) ||
+                                     code.author.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = categoryFilter === 'all' || code.category === categoryFilter;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            generateCodeCards(filteredData);
+        }
+        
+        // Navigate to code page with ID parameter
+        function navigateToCodePage(id) {
+            // Redirect to the specified URL format
+            window.location.href = `https://cst.de5.net/code/${id}.html`;
+        }
+        
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-CN', options);
+        }
+        
+        // Toggle hidden page
+        function toggleHiddenPage() {
+            const mainPage = document.getElementById('main-page');
+            const hiddenPage = document.getElementById('hidden-page');
+            
+            if (hiddenPage.style.display === 'block') {
+                hiddenPage.style.display = 'none';
+                mainPage.style.display = 'flex';
+                document.body.style.overflow = 'auto';
+            } else {
+                hiddenPage.style.display = 'block';
+                mainPage.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    </script>
+</body>
+</html>
