@@ -288,18 +288,18 @@
             const userInfoMap = {
                 '永恒星': {
                     joinDate: '2025-05-20',
-                    contact: 'eternal_star@example.com',
-                    bio: 'C++资深开发者，擅长高性能计算和系统编程。热爱分享技术经验，希望能帮助更多人掌握C++编程技巧。'
+                    contact: 'cst@cstx.qzz.io',
+                    bio: 'C++菜鸟开发者，擅长系统编程。希望能帮助更多人完成C++编程作业。'
                 },
                 'Command_stone': {
-                    joinDate: '2025-06-15',
-                    contact: 'command_stone@example.com',
-                    bio: '算法竞赛爱好者，曾获得多个编程比赛奖项。专注于算法优化和问题解决，喜欢挑战复杂的编程问题。'
+                    joinDate: '2024-01-15',
+                    contact: 'Command_stone@126.com',
+                    bio: '*********，曾获得0个编程比赛奖项。'
                 },
                 'Command_star': {
                     joinDate: '2025-06-18',
-                    contact: 'command_star@example.com',
-                    bio: '游戏开发工程师，擅长使用C++进行高性能游戏引擎开发。对图形学和物理模拟有深入研究。'
+                    contact: 'command_stone_luck@outlook.com.com',
+                    bio: '游戏外挂开发工程师，擅长使用JAVA进行高性能游戏外挂开发。对外挂有深入研究。'
                 },
                 '新用户1': {
                     joinDate: '2025-07-01',
@@ -355,8 +355,8 @@
             
             // Return default info if user not found
             return userInfoMap[userName] || {
-                joinDate: '2025-01-01',
-                contact: 'user@example.com',
+                joinDate: '****-**-**',
+                contact: '****@*****',
                 bio: '热爱编程，喜欢分享代码和经验。'
             };
         }
@@ -373,7 +373,7 @@
             
             // Get category name
             const categoryNames = {
-                'data-structure': '数据结构',
+                'homework': '编程作业',
                 'algorithm': '算法',
                 'basic': '基础语法',
                 'advanced': '高级特性'
@@ -418,7 +418,8 @@
             avatarElement.onerror = function() {
                 console.error('Failed to load avatar from remote URL, using fallback');
                 // Use fallback avatar if remote one fails
-                const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=64ffda&color=0a192f`;
+                //const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=64ffda&color=0a192f`;
+                const fallbackUrl = `https://cst.de5.net/user/{encodeURIComponent(userName)}/icon.png`;
                 avatarElement.src = fallbackUrl;
             };
             
