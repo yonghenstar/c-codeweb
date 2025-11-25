@@ -212,7 +212,7 @@
                                 让我们一起学习、分享、成长！
                             </p>
                             <div class="mt-4 flex items-center text-sm text-gray-400">
-                                <span>Command_Stone · 2025-11-20</span>
+                                <span>Command_stone · 2025-11-20</span>
                             </div>
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                         <div class="flex gap-2">
                             <select id="filter-category" class="px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
                                 <option value="all">所有分类</option>
-                                <option value="data-structure">数据结构</option>
+                                <option value="homework">编程作业</option>
                                 <option value="algorithm">算法</option>
                                 <option value="basic">基础语法</option>
                                 <option value="advanced">高级特性</option>
@@ -354,11 +354,11 @@
         const codeData = [
             {
                 id: 1,
-                title: "date.3作业",
+                title: "data.3-1作业",
                 author: "永恒星",
                 date: "2025-11-25",
-                category: "data-structure",
-                description: "、输入一个大写字母字符将其转换为小写字母字符",
+                category: "homework",
+                description: "输入一个大写字母字符将其转换为小写字母字符",
                 code: `
 #include <bits/stdc++.h>
 using namespace std;
@@ -382,157 +382,34 @@ int main() {
             },
             {
                 id: 2,
-                title: "Dijkstra最短路径算法",
-                author: "算法专家",
+                title: "data.3-2作业",
+                author: "永恒星",
                 date: "2025-11-18",
-                category: "algorithm",
-                description: "使用优先队列实现的Dijkstra最短路径算法，适用于无负权边的图。",
-                code: `#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
+                category: "homework",
+                description: "输入一个小写字母字符将其转换为大写字母对应的数字并输出",
+                code: `
+#include <bits/stdc++.h>
 using namespace std;
 
-const int INF = INT_MAX;
-
-void dijkstra(int start, const vector<vector<pair<int, int>>>& graph, vector<int>& distance) {
-    int n = graph.size();
-    distance.assign(n, INF);
-    distance[start] = 0;
-    
-    // 优先队列：(距离, 节点)，按距离从小到大排序
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
-    pq.push({0, start});
-    
-    while (!pq.empty()) {
-        int currentDist = pq.top().first;
-        int currentNode = pq.top().second;
-        pq.pop();
-        
-        // 如果当前距离大于已知最短距离，则跳过
-        if (currentDist > distance[currentNode]) continue;
-        
-        // 遍历当前节点的所有邻居
-        for (auto& edge : graph[currentNode]) {
-            int nextNode = edge.first;
-            int weight = edge.second;
-            
-            // 松弛操作
-            if (distance[currentNode] + weight < distance[nextNode]) {
-                distance[nextNode] = distance[currentNode] + weight;
-                pq.push({distance[nextNode], nextNode});
-            }
-        }
-    }
-}
-
 int main() {
-    // 图的邻接表表示
-    vector<vector<pair<int, int>>> graph = {
-        {{1, 4}, {2, 1}},    // 节点0连接到1(权重4)和2(权重1)
-        {{3, 1}},            // 节点1连接到3(权重1)
-        {{1, 2}, {3, 5}},    // 节点2连接到1(权重2)和3(权重5)
-        {}                   // 节点3没有出边
-    };
-    
-    vector<int> distance;
-    int startNode = 0;
-    dijkstra(startNode, graph, distance);
-    
-    // 输出从起点到各节点的最短距离
-    cout << "从节点" << startNode << "到各节点的最短距离:\\n";
-    for (int i = 0; i < distance.size(); ++i) {
-        if (distance[i] == INF) {
-            cout << "节点" << i << ": 不可达\\n";
-        } else {
-            cout << "节点" << i << ": " << distance[i] << "\\n";
-        }
+    char inputChar;
+    cout << "请输入小写字母: ";
+    cin >> inputChar;
+    if (islower(inputChar)) 
+    {
+        char uppercase = toupper(inputChar);
+        int position = uppercase - 'A' + 1;
+        cout << "大写字母: " << uppercase << endl;
+        cout << "对应数字: " << position << endl;
     }
-    
+    else 
+    {
+        cout << "输入错误" << endl;
+        return 1;
+    }
     return 0;
-}`
-            },
-            {
-                id: 3,
-                title: "0/1背包问题动态规划",
-                author: "动态规划爱好者",
-                date: "2025-11-17",
-                category: "algorithm",
-                description: "使用动态规划解决0/1背包问题，找出在给定容量下能装入背包的最大价值。",
-                code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int knapsack(int W, const vector<int>& weight, const vector<int>& value, int n) {
-    // 创建二维数组dp，dp[i][w]表示前i个物品在容量为w时的最大价值
-    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
-    
-    for (int i = 1; i <= n; ++i) {
-        for (int w = 1; w <= W; ++w) {
-            // 如果当前物品重量大于背包容量，则不选该物品
-            if (weight[i - 1] > w) {
-                dp[i][w] = dp[i - 1][w];
-            } else {
-                // 否则，选择最大值：不选当前物品或选当前物品
-                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weight[i - 1]] + value[i - 1]);
-            }
-        }
-    }
-    
-    return dp[n][W];
 }
-
-// 回溯找出选择的物品
-void findSelectedItems(int W, const vector<int>& weight, const vector<int>& value, int n) {
-    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
-    
-    // 先计算dp数组
-    for (int i = 1; i <= n; ++i) {
-        for (int w = 1; w <= W; ++w) {
-            if (weight[i - 1] > w) {
-                dp[i][w] = dp[i - 1][w];
-            } else {
-                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weight[i - 1]] + value[i - 1]);
-            }
-        }
-    }
-    
-    // 回溯找出选择的物品
-    int remainingWeight = W;
-    vector<bool> selected(n, false);
-    
-    for (int i = n; i > 0; --i) {
-        // 如果当前物品被选中
-        if (dp[i][remainingWeight] != dp[i - 1][remainingWeight]) {
-            selected[i - 1] = true;
-            remainingWeight -= weight[i - 1];
-        }
-    }
-    
-    // 输出选择的物品
-    cout << "选择的物品: ";
-    for (int i = 0; i < n; ++i) {
-        if (selected[i]) {
-            cout << i + 1 << " ";
-        }
-    }
-    cout << endl;
-}
-
-int main() {
-    int W = 50; // 背包容量
-    vector<int> weight = {10, 20, 30}; // 物品重量
-    vector<int> value = {60, 100, 120}; // 物品价值
-    int n = weight.size(); // 物品数量
-    
-    int maxValue = knapsack(W, weight, value, n);
-    cout << "背包的最大价值: " << maxValue << endl;
-    
-    findSelectedItems(W, weight, value, n);
-    
-    return 0;
-}`
+`
             },
             {
                 id: 4,
@@ -912,7 +789,7 @@ int main() {
                 
                 // Get category name
                 const categoryNames = {
-                    'data-structure': '数据结构',
+                    'homework': '数据结构',
                     'algorithm': '算法',
                     'basic': '基础语法',
                     'advanced': '高级特性'
