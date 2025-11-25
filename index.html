@@ -354,143 +354,29 @@
         const codeData = [
             {
                 id: 1,
-                title: "二叉搜索树实现",
-                author: "编程爱好者",
-                date: "2025-11-19",
+                title: "date.3作业",
+                author: "永恒星",
+                date: "2025-11-25",
                 category: "data-structure",
-                description: "一个完整的二叉搜索树实现，包含插入、中序遍历、计算高度和打印树结构等功能。",
-                code: `#include <iostream>
-#include <iomanip>
+                description: "、输入一个大写字母字符将其转换为小写字母字符",
+                code: `
+#include <bits/stdc++.h>
 using namespace std;
 
-// 二叉树节点结构
-class TreeNode {
-public:
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-};
-
-// 二叉搜索树类
-class BinarySearchTree {
-private:
-    TreeNode* root;
-    
-    // 递归插入节点
-    TreeNode* insertNode(TreeNode* node, int val) {
-        if (!node) return new TreeNode(val);
-        
-        if (val < node->val) {
-            node->left = insertNode(node->left, val);
-        } else if (val > node->val) {
-            node->right = insertNode(node->right, val);
-        }
-        
-        // 如果值已存在，则不插入（避免重复）
-        return node;
-    }
-    
-    // 中序遍历（递归）
-    void inorderTraversal(TreeNode* node) {
-        if (!node) return;
-        
-        inorderTraversal(node->left);
-        cout << node->val << " ";
-        inorderTraversal(node->right);
-    }
-    
-    // 计算树的高度
-    int getHeight(TreeNode* node) {
-        if (!node) return 0;
-        return max(getHeight(node->left), getHeight(node->right)) + 1;
-    }
-    
-    // 打印树的结构
-    void printTree(TreeNode* node, int space) {
-        if (!node) return;
-        
-        space += 10;
-        
-        // 先打印右子树
-        printTree(node->right, space);
-        
-        // 打印当前节点
-        cout << endl;
-        for (int i = 10; i < space; i++)
-            cout << " ";
-        cout << node->val << "\n";
-        
-        // 打印左子树
-        printTree(node->left, space);
-    }
-    
-    // 销毁树
-    void destroyTree(TreeNode* node) {
-        if (!node) return;
-        
-        destroyTree(node->left);
-        destroyTree(node->right);
-        delete node;
-    }
-    
-public:
-    // 构造函数
-    BinarySearchTree() : root(nullptr) {}
-    
-    // 析构函数
-    ~BinarySearchTree() {
-        destroyTree(root);
-    }
-    
-    // 插入值
-    void insert(int val) {
-        root = insertNode(root, val);
-    }
-    
-    // 中序遍历
-    void inorder() {
-        cout << "中序遍历: ";
-        inorderTraversal(root);
-        cout << endl;
-    }
-    
-    // 获取树的高度
-    int height() {
-        return getHeight(root);
-    }
-    
-    // 打印树的结构
-    void print() {
-        cout << "树的结构:\\n";
-        printTree(root, 0);
-        cout << endl;
-    }
-};
-
-// 测试函数
 int main() {
-    BinarySearchTree bst;
+    char inputChar;
     
-    // 插入一些值
-    bst.insert(50);
-    bst.insert(30);
-    bst.insert(20);
-    bst.insert(40);
-    bst.insert(70);
-    bst.insert(60);
-    bst.insert(80);
-    
-    // 显示中序遍历结果（应该是有序的）
-    bst.inorder();
-    
-    // 显示树的高度
-    cout << "树的高度: " << bst.height() << endl;
-    
-    // 打印树的结构
-    bst.print();
-    
+    cout << "请输入: ";
+    cin >> inputChar;
+    if (isupper(inputChar)) {
+        char outputChar = tolower(inputChar);
+        cout << "转换结果: " << outputChar << endl;
+    }
+    else 
+    {
+        cout << "输入错误" << endl;
+        return 1;
+    }
     return 0;
 }`
             },
