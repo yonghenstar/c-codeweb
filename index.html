@@ -412,87 +412,22 @@ int main() {
 `
             },
             {
+                id: 3,
+                title: "快速排序算法",
+                author: "排序专家",
+                date: "2025-11-16",
+                category: "algorithm",
+                description: "经典的快速排序算法实现，使用分治法策略，平均时间复杂度为O(n log n)。",
+                code: `你好`
+            },
+            {
                 id: 4,
                 title: "快速排序算法",
                 author: "排序专家",
                 date: "2025-11-16",
                 category: "algorithm",
                 description: "经典的快速排序算法实现，使用分治法策略，平均时间复杂度为O(n log n)。",
-                code: `#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-using namespace std;
-
-// 交换两个元素
-void swap(int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}
-
-// 分区函数：选择最后一个元素作为 pivot
-int partition(vector<int>& arr, int low, int high) {
-    int pivot = arr[high]; // pivot
-    int i = (low - 1); // 小于 pivot 的元素的索引
-    
-    for (int j = low; j <= high - 1; ++j) {
-        // 如果当前元素小于或等于 pivot
-        if (arr[j] <= pivot) {
-            ++i; // 增加小于 pivot 区域的索引
-            swap(arr[i], arr[j]);
-        }
-    }
-    swap(arr[i + 1], arr[high]);
-    return (i + 1);
-}
-
-// 随机分区函数：随机选择 pivot，避免最坏情况
-int randomPartition(vector<int>& arr, int low, int high) {
-    // 生成 [low, high] 范围内的随机索引
-    srand(time(nullptr));
-    int randomIndex = low + rand() % (high - low + 1);
-    
-    // 将随机选择的 pivot 与最后一个元素交换
-    swap(arr[randomIndex], arr[high]);
-    
-    return partition(arr, low, high);
-}
-
-// 快速排序函数
-void quickSort(vector<int>& arr, int low, int high) {
-    if (low < high) {
-        // pi 是分区索引，arr[pi] 现在位于正确的位置
-        int pi = randomPartition(arr, low, high);
-        
-        // 分别对 pivot 左右两边的子数组进行排序
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}
-
-// 打印数组
-void printArray(const vector<int>& arr) {
-    for (int num : arr) {
-        cout << num << " ";
-    }
-    cout << endl;
-}
-
-int main() {
-    vector<int> arr = {10, 7, 8, 9, 1, 5};
-    int n = arr.size();
-    
-    cout << "排序前的数组: ";
-    printArray(arr);
-    
-    quickSort(arr, 0, n - 1);
-    
-    cout << "排序后的数组: ";
-    printArray(arr);
-    
-    return 0;
-}`
+                code: `你好`
             },
             {
                 id: 5,
@@ -501,132 +436,7 @@ int main() {
                 date: "2025-11-15",
                 category: "advanced",
                 description: "C++11及以上标准中的智能指针使用示例，包括unique_ptr、shared_ptr和weak_ptr。",
-                code: `#include <iostream>
-#include <memory>
-#include <vector>
-
-class MyClass {
-private:
-    int value;
-public:
-    MyClass(int val) : value(val) {
-        std::cout << "MyClass 构造函数调用，值: " << value << std::endl;
-    }
-    
-    ~MyClass() {
-        std::cout << "MyClass 析构函数调用，值: " << value << std::endl;
-    }
-    
-    void doSomething() {
-        std::cout << "MyClass 正在执行操作，值: " << value << std::endl;
-    }
-    
-    int getValue() const { return value; }
-};
-
-// unique_ptr 示例
-void uniquePtrExample() {
-    std::cout << "\\n--- unique_ptr 示例 ---" << std::endl;
-    
-    // 创建 unique_ptr
-    std::unique_ptr<MyClass> ptr1 = std::make_unique<MyClass>(10);
-    ptr1->doSomething();
-    
-    // unique_ptr 不能复制，只能移动
-    std::unique_ptr<MyClass> ptr2 = std::move(ptr1);
-    
-    if (!ptr1) {
-        std::cout << "ptr1 现在为空" << std::endl;
-    }
-    
-    if (ptr2) {
-        ptr2->doSomething();
-    }
-    
-    // 不需要手动删除，析构函数会自动调用
-}
-
-// shared_ptr 示例
-void sharedPtrExample() {
-    std::cout << "\\n--- shared_ptr 示例 ---" << std::endl;
-    
-    // 创建 shared_ptr
-    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>(20);
-    std::cout << "引用计数: " << ptr1.use_count() << std::endl;
-    
-    // shared_ptr 可以复制
-    std::shared_ptr<MyClass> ptr2 = ptr1;
-    std::cout << "复制后引用计数: " << ptr1.use_count() << std::endl;
-    
-    {
-        std::shared_ptr<MyClass> ptr3 = ptr1;
-        std::cout << "作用域内引用计数: " << ptr1.use_count() << std::endl;
-        ptr3->doSomething();
-    }
-    
-    std::cout << "作用域外引用计数: " << ptr1.use_count() << std::endl;
-    
-    ptr1->doSomething();
-    ptr2->doSomething();
-    
-    // 当最后一个 shared_ptr 销毁时，对象才会被删除
-}
-
-// weak_ptr 示例
-void weakPtrExample() {
-    std::cout << "\\n--- weak_ptr 示例 ---" << std::endl;
-    
-    std::shared_ptr<MyClass> sharedPtr = std::make_shared<MyClass>(30);
-    std::weak_ptr<MyClass> weakPtr = sharedPtr;
-    
-    std::cout << "shared_ptr 引用计数: " << sharedPtr.use_count() << std::endl;
-    std::cout << "weak_ptr 引用计数: " << weakPtr.use_count() << std::endl;
-    
-    // weak_ptr 需要先转换为 shared_ptr 才能使用
-    if (auto tempPtr = weakPtr.lock()) {
-        tempPtr->doSomething();
-        std::cout << "转换后的引用计数: " << tempPtr.use_count() << std::endl;
-    } else {
-        std::cout << "对象已被销毁" << std::endl;
-    }
-    
-    // 当 shared_ptr 销毁后，weak_ptr 无法再访问对象
-    sharedPtr.reset();
-    
-    if (auto tempPtr = weakPtr.lock()) {
-        tempPtr->doSomething();
-    } else {
-        std::cout << "对象已被销毁" << std::endl;
-    }
-}
-
-// 智能指针数组示例
-void smartPtrArrayExample() {
-    std::cout << "\\n--- 智能指针数组示例 ---" << std::endl;
-    
-    // unique_ptr 可以管理数组
-    std::unique_ptr<MyClass[]> arrPtr = std::make_unique<MyClass[]>(3);
-    
-    for (int i = 0; i < 3; ++i) {
-        arrPtr[i].doSomething();
-    }
-    
-    // shared_ptr 管理数组需要指定删除器
-    std::shared_ptr<MyClass> sharedArrPtr = std::shared_ptr<MyClass>(
-        new MyClass[3], 
-        [](MyClass* p) { delete[] p; }
-    );
-}
-
-int main() {
-    uniquePtrExample();
-    sharedPtrExample();
-    weakPtrExample();
-    smartPtrArrayExample();
-    
-    std::cout << "\\n--- 主函数结束 ---" << std::endl;
-    return 0;
-}`
+                code: `你好`
             },
             {
                 id: 6,
@@ -635,110 +445,7 @@ int main() {
                 date: "2025-11-14",
                 category: "basic",
                 description: "C++基础语法示例，包括变量、函数、类、循环和条件语句等基本概念。",
-                code: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-
-// 函数示例：计算两个数的和
-int add(int a, int b) {
-    return a + b;
-}
-
-// 函数示例：计算阶乘
-int factorial(int n) {
-    if (n <= 1) return 1;
-    return n * factorial(n - 1);
-}
-
-// 类示例
-class Person {
-private:
-    std::string name;
-    int age;
-public:
-    // 构造函数
-    Person(std::string n, int a) : name(n), age(a) {}
-    
-    // 成员函数
-    void introduce() {
-        std::cout << "大家好，我叫" << name << "，今年" << age << "岁。" << std::endl;
-    }
-    
-    // Getter 和 Setter
-    std::string getName() const { return name; }
-    int getAge() const { return age; }
-    void setAge(int a) { age = a; }
-};
-
-// 模板函数示例
-template <typename T>
-T maxValue(T a, T b) {
-    return (a > b) ? a : b;
-}
-
-int main() {
-    // 基本变量和输入输出
-    std::cout << "Hello, C++!" << std::endl;
-    
-    int num1 = 10;
-    double num2 = 3.14;
-    std::string str = "C++编程";
-    
-    std::cout << "整数: " << num1 << std::endl;
-    std::cout << "浮点数: " << num2 << std::endl;
-    std::cout << "字符串: " << str << std::endl;
-    
-    // 条件语句
-    if (num1 > 5) {
-        std::cout << num1 << " 大于 5" << std::endl;
-    } else {
-        std::cout << num1 << " 小于等于 5" << std::endl;
-    }
-    
-    // 循环语句
-    std::cout << "循环输出 1 到 5: ";
-    for (int i = 1; i <= 5; ++i) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-    
-    // 数组和向量
-    int arr[] = {1, 2, 3, 4, 5};
-    std::vector<int> vec = {6, 7, 8, 9, 10};
-    
-    std::cout << "数组元素: ";
-    for (int i = 0; i < 5; ++i) {
-        std::cout << arr[i] << " ";
-    }
-    std::cout << std::endl;
-    
-    std::cout << "向量元素: ";
-    for (int num : vec) {
-        std::cout << num << " ";
-    }
-    std::cout << std::endl;
-    
-    // 函数调用
-    int sum = add(3, 5);
-    std::cout << "3 + 5 = " << sum << std::endl;
-    
-    int fact = factorial(5);
-    std::cout << "5 的阶乘是: " << fact << std::endl;
-    
-    // 对象和类
-    Person person("张三", 25);
-    person.introduce();
-    person.setAge(26);
-    std::cout << person.getName() << " 现在 " << person.getAge() << " 岁。" << std::endl;
-    
-    // 模板函数
-    std::cout << "max(10, 20) = " << maxValue(10, 20) << std::endl;
-    std::cout << "max(3.14, 2.71) = " << maxValue(3.14, 2.71) << std::endl;
-    std::cout << "max(\"apple\", \"banana\") = " << maxValue(std::string("apple"), std::string("banana")) << std::endl;
-    
-    return 0;
-}`
+                code: `你好`
             }
         ];
         
@@ -789,7 +496,7 @@ int main() {
                 
                 // Get category name
                 const categoryNames = {
-                    'homework': '数据结构',
+                    'homework': '编程作业',
                     'algorithm': '算法',
                     'basic': '基础语法',
                     'advanced': '高级特性'
@@ -838,7 +545,7 @@ int main() {
         // Navigate to code page with ID parameter
         function navigateToCodePage(id) {
             // Redirect to the specified URL format
-            window.location.href = `https://cst.de5.net/code/${id}.html`;
+            window.location.href = `https://cpp.us.ci/code/${id}.html`;
         }
         
         // Update current time
