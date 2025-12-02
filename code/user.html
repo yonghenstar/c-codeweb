@@ -272,7 +272,7 @@
             document.getElementById('user-code-title').textContent = `${userName}分享的代码示例`;
             
             // Set user avatar from specified URL
-            const avatarUrl = `https://cst.de5.net/user/${encodeURIComponent(userName)}/icon.png`;
+            const avatarUrl = `https://cpp.us.ci/user/${encodeURIComponent(userName)}/icon.png`;
             
             // Try to load avatar from the specified URL
             loadAvatarFromRemoteUrl(avatarUrl, userName);
@@ -407,7 +407,7 @@
         
         // Navigate to code page with ID parameter
         function navigateToCodePage(id) {
-            window.location.href = `https://cst.de5.net/code/${id}.html`;
+            window.location.href = `https://cpp.us.ci/code/${id}.html`;
         }
         
         // Load avatar from remote URL
@@ -419,7 +419,7 @@
                 console.error('Failed to load avatar from remote URL, using fallback');
                 // Use fallback avatar if remote one fails
                 //const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=64ffda&color=0a192f`;
-                const fallbackUrl = `https://cst.de5.net/user/{encodeURIComponent(userName)}/icon.png`;
+                const fallbackUrl = `https://cpp.us.ci/user/{encodeURIComponent(userName)}/icon.png`;
                 avatarElement.src = fallbackUrl;
             };
             
