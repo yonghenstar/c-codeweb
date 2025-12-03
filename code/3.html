@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">C++代码分享平台 - 代码详情</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a192f',
+                        secondary: '#64ffda',
+                        accent: '#112240',
+                        light: '#e6f1ff',
+                        dark: '#020c1b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .glass {
+                background: rgba(10, 25, 47, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(100, 255, 218, 0.1);
+            }
+            .gradient-text {
+                background: linear-gradient(90deg, #64ffda, #a8fff0);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            }
+            .code-block {
+                position: relative;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
+            }
+            .code-header {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                background: #1e293b;
+                border-bottom: 1px solid #334155;
+            }
+            .code-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 6px;
+            }
+            .code-dot-red {
+                background: #ef4444;
+            }
+            .code-dot-yellow {
+                background: #f59e0b;
+            }
+            .code-dot-green {
+                background: #22c55e;
+            }
+            .copy-button {
+                margin-left: auto;
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.25rem;
+                background: #334155;
+                color: #e2e8f0;
+                font-size: 0.75rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .copy-button:hover {
+                background: #475569;
+            }
+            .copy-button.copied {
+                background: #22c55e;
+                color: white;
+            }
+            .hidden-page {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(10, 25, 47, 0.95);
+                z-index: 50;
+                overflow-y: auto;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            .bg-animation {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                z-index: -1;
+            }
+            .bg-animation li {
+                position: absolute;
+                display: block;
+                list-style: none;
+                background: rgba(100, 255, 218, 0.1);
+                animation: animate 25s linear infinite;
+                bottom: -150px;
+                border-radius: 50%;
+            }
+            @keyframes animate {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0.5;
+                    border-radius: 50%;
+                }
+                100% {
+                    transform: translateY(-1000px) rotate(720deg);
+                    opacity: 0;
+                    border-radius: 50%;
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-primary text-light min-h-screen flex flex-col">
+    <!-- Background Animation -->
+    <ul class="bg-animation">
+        <li style="left: 25%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 18s;"></li>
+        <li style="left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s;"></li>
+        <li style="left: 70%; width: 20px; height: 20px; animation-delay: 4s; animation-duration: 10s;"></li>
+        <li style="left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 15s;"></li>
+        <li style="left: 65%; width: 20px; height: 20px; animation-delay: 0s; animation-duration: 11s;"></li>
+        <li style="left: 75%; width: 110px; height: 110px; animation-delay: 3s; animation-duration: 20s;"></li>
+        <li style="left: 35%; width: 150px; height: 150px; animation-delay: 7s; animation-duration: 25s;"></li>
+        <li style="left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 35s;"></li>
+        <li style="left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 40s;"></li>
+        <li style="left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 25s;"></li>
+    </ul>
+
+    <!-- Main Content -->
+    <div id="main-page" class="flex flex-col min-h-screen">
+        <!-- Header with Time -->
+        <header class="glass py-4 px-6 md:px-12">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="https://cpp.us.ci" class="flex items-center hover:text-secondary transition-colors duration-300">
+                        <i class="fa fa-arrow-left mr-2"></i>
+                        <span class="text-gray-300">返回主页</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <i class="fa fa-code text-secondary text-2xl mr-3"></i>
+                    <h1 class="text-xl md:text-2xl font-bold gradient-text">C++代码分享平台</h1>
+                </div>
+                <div id="current-time" class="text-sm md:text-base font-mono"></div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow container mx-auto py-8 px-4 md:px-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Code Title and Author Info -->
+                <div class="mb-6">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                        <div class="w-24 h-24 rounded-full bg-accent overflow-hidden border-2 border-secondary flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity" id="author-avatar">
+                            <img src="" alt="作者头像" class="w-full h-full object-cover" id="avatar-image">
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h2 id="code-title" class="text-2xl md:text-3xl font-bold mb-2 text-shadow">加载中...</h2>
+                            <div class="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-sm text-gray-300">
+                                <span id="code-author" class="flex items-center"><i class="fa fa-user-circle mr-1"></i> <span class="cursor-pointer hover:text-secondary transition-colors">作者: 加载中...</span></span>
+                                <span id="code-date"><i class="fa fa-calendar mr-1"></i> 发布日期: 加载中...</span>
+                                <span id="code-category"><i class="fa fa-tag mr-1"></i> 分类: 加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Author's Message -->
+                <div class="glass rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-semibold mb-3 flex items-center">
+                        <i class="fa fa-comment text-secondary mr-2"></i>
+                        作者留言
+                    </h3>
+                    <p id="code-description" class="text-gray-300 leading-relaxed">
+                        加载中...
+                    </p>
+                </div>
+
+                <!-- Code Display -->
+                <div class="code-block">
+                    <div class="code-header">
+                        <div class="code-dot code-dot-red"></div>
+                        <div class="code-dot code-dot-yellow"></div>
+                        <div class="code-dot code-dot-green"></div>
+                        <span id="code-filename" class="text-sm text-gray-300 font-mono">loading...</span>
+                        <button class="copy-button" onclick="copyCode()">
+                            <i class="fa fa-copy mr-1"></i> 复制代码
+                        </button>
+                    </div>
+                    <pre><code class="language-cpp hljs p-4 overflow-x-auto" id="code-content">
+加载中...
+                    </code></pre>
+                </div>
+
+                <!-- Code Description -->
+                <div class="glass rounded-lg p-6 mt-8">
+                    <h3 class="text-xl font-semibold mb-3 flex items-center">
+                        <i class="fa fa-info-circle text-secondary mr-2"></i>
+                        代码说明
+                    </h3>
+                    <p class="text-gray-300 leading-relaxed mb-4" id="code-detail-description">
+                        加载中...
+                    </p>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="glass rounded-lg p-6 mt-8">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fa fa-comments text-secondary mr-2"></i>
+                        评论区
+                    </h3>
+                    
+                    <!-- Comment Form -->
+                    <div class="mb-8">
+                        <textarea id="comment-input" placeholder="分享你的想法..." 
+                            class="w-full px-4 py-3 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white resize-none"
+                            rows="3"></textarea>
+                        <div class="flex justify-end mt-3">
+                            <button id="post-comment" class="px-4 py-2 bg-secondary text-dark font-semibold rounded-md hover:bg-opacity-90 transition-colors duration-300">
+                                发表评论
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Comments List -->
+                    <div id="comments-list" class="space-y-6">
+                        <!-- Comments will be dynamically generated here -->
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-accent overflow-hidden flex-shrink-0">
+                                <img src="https://ui-avatars.com/api/?name=访客&background=64ffda&color=0a192f" alt="访客头像" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <span class="font-semibold text-white">访客</span>
+                                    <span class="ml-3 text-xs text-gray-400">2025-11-25 15:30</span>
+                                </div>
+                                <p class="text-gray-300">
+                                    这是一个很好的代码示例，帮助我完成了编程作业。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-accent overflow-hidden flex-shrink-0">
+                                <img src="https://ui-avatars.com/api/?name=编程爱好者&background=64ffda&color=0a192f" alt="编程爱好者头像" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <span class="font-semibold text-white">编程爱好者</span>
+                                    <span class="ml-3 text-xs text-gray-400">2025-11-19 10:15</span>
+                                </div>
+                                <p class="text-gray-300">
+                                    感谢分享！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="glass py-6 px-4">
+            <div class="container mx-auto text-center">
+                <p id="copyright" class="text-sm md:text-base text-gray-400 cursor-pointer hover:text-secondary transition-colors duration-300">
+                    CST协会Code工会 | C++代码分享平台 | 2025
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    <i class="fa fa-code-fork mr-1"></i> 分享知识，共同进步
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden Page -->
+    <div id="hidden-page" class="hidden-page">
+        <div class="container mx-auto px-4 py-12 max-w-4xl">
+            <div class="glass rounded-lg p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold gradient-text">CST协会成员区</h2>
+                    <button id="close-hidden" class="text-gray-400 hover:text-white">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-secondary">欢迎访问隐藏区域</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        这里是CST协会的内部成员区域。在这里，我们分享最新的C++技术动态、
+                        算法研究成果和项目开发经验。如果你是协会成员，请登录以获取更多资源。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="glass rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fa fa-calendar-check-o text-secondary mr-2"></i>
+                            近期活动
+                        </h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">11月25日</span>
+                                <span>CSTII级成员研讨会</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">12月10日</span>
+                                <span>算法竞赛训练</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-xs bg-secondary text-dark px-2 py-1 rounded mr-2 mt-1">12月20日</span>
+                                <span>C++项目开发分享会</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-lg font-semibold mb-3 flex items-center">
+                            <i class="fa fa-book text-secondary mr-2"></i>
+                            推荐资源
+                        </h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-center">
+                                <i class="fa fa-file-pdf-o text-red-400 mr-2"></i>
+                                <span>CST权威</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-file-code-o text-green-400 mr-2"></i>
+                                <span>CST-X权威</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-link text-blue-400 mr-2"></i>
+                                <span>CST-Future权威</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-lg p-6">
+                    <h4 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fa fa-users text-secondary mr-2"></i>
+                        成员登录
+                    </h4>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-300 mb-1">用户名</label>
+                            <input type="text" id="username" class="w-full px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-300 mb-1">密码</label>
+                            <input type="password" id="password" class="w-full px-4 py-2 bg-accent border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary text-white">
+                        </div>
+                        <button type="button" class="w-full bg-secondary text-dark font-semibold py-2 px-4 rounded-md hover:bg-opacity-90 transition-colors duration-300">
+                            登录
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize code highlighting and load code based on URL parameter
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Add event listener to copyright text
+            document.getElementById('copyright').addEventListener('click', toggleHiddenPage);
+            document.getElementById('close-hidden').addEventListener('click', toggleHiddenPage);
+            
+            // Add event listener to post comment button
+            document.getElementById('post-comment').addEventListener('click', postComment);
+            
+            // Load code based on URL parameter
+            loadCodeFromUrl();
+        });
+        
+        // Get URL parameter by name
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        
+        // Load code data from localStorage
+        function loadCodeDataFromLocalStorage() {
+            const savedData = localStorage.getItem('codeData');
+            return savedData ? JSON.parse(savedData) : [];
+        }
+        
+        // Load code based on URL parameter
+        function loadCodeFromUrl() {
+            // Get code ID from URL path (e.g., /code/1.html -> id=1)
+            const pathParts = window.location.pathname.split('/');
+            const filename = pathParts[pathParts.length - 1];
+            const codeId = parseInt(filename.replace('.html', ''));
+            
+            if (isNaN(codeId)) {
+                showError('无效的代码ID参数');
+                return;
+            }
+            
+            // Try to load code from the specified URL
+            loadCodeFromRemoteUrl(codeId);
+        }
+        
+        // Load code from remote URL
+        async function loadCodeFromRemoteUrl(codeId) {
+            try {
+                // First, try to get basic code info from localStorage (to get author name)
+                const codeData = loadCodeDataFromLocalStorage();
+                const localCode = codeData.find(item => item.id === codeId);
+                
+                if (!localCode) {
+                    throw new Error('No local code data found');
+                }
+                
+                // Show loading message
+                showLoading();
+                
+                // Try to fetch code content from the specified URL pattern
+                const authorName = encodeURIComponent(localCode.author);
+                const codeUrl = `https://cpp.us.ci/user/${authorName}/code/code${codeId}.cpp`;
+                console.log(`Attempting to fetch code from: ${codeUrl}`);
+                
+                // Fetch code content
+                const response = await fetch(codeUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Get code content from response
+                const codeContent = await response.text();
+                
+                // Update code object with fetched content
+                const updatedCode = {
+                    ...localCode,
+                    code: codeContent
+                };
+                
+                // Update page with fetched code
+                updatePageWithCodeData(updatedCode);
+                
+            } catch (error) {
+                console.error('Failed to fetch remote code:', error);
+                
+                // If remote fetch fails, try to use local data or show error
+                const codeData = loadCodeDataFromLocalStorage();
+                const code = codeData.find(item => item.id === codeId);
+                
+                if (code) {
+                    updatePageWithCodeData(code);
+                    showWarning('使用本地缓存数据，可能不是最新版本');
+                } else {
+                    showError('未找到对应的代码示例');
+                }
+            }
+        }
+        
+        // Update page content with code data
+        function updatePageWithCodeData(code) {
+            // Get category name
+            const categoryNames = {
+                'homework': '编程作业',
+                'algorithm': '算法',
+                'basic': '基础语法',
+                'advanced': '高级特性'
+            };
+            
+            // Update page content with code data
+            document.getElementById('page-title').textContent = `C++代码分享平台 - ${code.title}`;
+            document.getElementById('code-title').textContent = code.title;
+            document.getElementById('code-author').innerHTML = `<i class="fa fa-user-circle mr-1"></i> <span class="cursor-pointer hover:text-secondary transition-colors">作者: ${code.author}</span>`;
+            document.getElementById('code-date').innerHTML = `<i class="fa fa-calendar mr-1"></i> 发布日期: ${code.date}`;
+            document.getElementById('code-category').innerHTML = `<i class="fa fa-tag mr-1"></i> 分类: ${categoryNames[code.category] || code.category}`;
+            document.getElementById('code-description').textContent = code.description;
+            document.getElementById('code-detail-description').textContent = code.description;
+            document.getElementById('code-filename').textContent = `${code.title.replace(/\s+/g, '')}.cpp`;
+            document.getElementById('code-content').textContent = code.code;
+            
+            // Set author avatar
+            const authorName = code.author;
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=64ffda&color=0a192f`;
+            document.getElementById('avatar-image').src = avatarUrl;
+            
+            // Add click event to author avatar and name
+            document.getElementById('author-avatar').onclick = () => navigateToUserPage(authorName);
+            const authorNameElement = document.getElementById('code-author').querySelector('span');
+            authorNameElement.onclick = () => navigateToUserPage(authorName);
+            
+            // Highlight code
+            hljs.highlightAll();
+            
+            // Load comments
+            loadComments(code.id);
+        }
+        
+        // Show loading message
+        function showLoading() {
+            document.getElementById('code-title').textContent = '加载中...';
+            document.getElementById('code-author').innerHTML = '<i class="fa fa-user-circle mr-1"></i> <span>作者: 加载中...</span>';
+            document.getElementById('code-date').innerHTML = '<i class="fa fa-calendar mr-1"></i> 发布日期: 加载中...';
+            document.getElementById('code-category').innerHTML = '<i class="fa fa-tag mr-1"></i> 分类: 加载中...';
+            document.getElementById('code-description').textContent = '加载中...';
+            document.getElementById('code-detail-description').textContent = '加载中...';
+            document.getElementById('code-filename').textContent = 'loading...';
+            document.getElementById('code-content').textContent = '加载中...';
+        }
+        
+        // Show warning message
+        function showWarning(message) {
+            const warningElement = document.createElement('div');
+            warningElement.className = 'bg-yellow-900 bg-opacity-30 border border-yellow-500 text-yellow-300 px-4 py-3 rounded mb-6';
+            warningElement.innerHTML = `<i class="fa fa-exclamation-triangle mr-2"></i> ${message}`;
+            
+            const mainContent = document.querySelector('main > div > div:first-child');
+            mainContent.parentNode.insertBefore(warningElement, mainContent);
+        }
+        
+        // Navigate to user page
+        function navigateToUserPage(authorName) {
+            window.location.href = `user.html?name=${encodeURIComponent(authorName)}`;
+        }
+        
+        // Load comments from localStorage
+        function loadComments(codeId) {
+            const commentsKey = `comments_${codeId}`;
+            const savedComments = localStorage.getItem(commentsKey);
+            const comments = savedComments ? JSON.parse(savedComments) : [];
+            
+            // Add default comments if none exist
+            if (comments.length === 0) {
+                comments.push({
+                    author: '访客',
+                    date: '2025-11-25 15:30',
+                    content: '这是一个很好的代码示例，帮助我完成了编程作业。'
+                });
+                
+                comments.push({
+                    author: '编程爱好者',
+                    date: '2025-11-25 10:15',
+                    content: '感谢分享！'
+                });
+                
+                localStorage.setItem(commentsKey, JSON.stringify(comments));
+            }
+            
+            renderComments(comments);
+        }
+        
+        // Render comments to the page
+        function renderComments(comments) {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            
+            comments.forEach(comment => {
+                const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&background=64ffda&color=0a192f`;
+                
+                const commentElement = document.createElement('div');
+                commentElement.className = 'flex gap-4';
+                commentElement.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-accent overflow-hidden flex-shrink-0">
+                        <img src="${avatarUrl}" alt="${comment.author}头像" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-1">
+                            <span class="font-semibold text-white">${comment.author}</span>
+                            <span class="ml-3 text-xs text-gray-400">${comment.date}</span>
+                        </div>
+                        <p class="text-gray-300">
+                            ${comment.content}
+                        </p>
+                    </div>
+                `;
+                
+                commentsList.appendChild(commentElement);
+            });
+        }
+        
+        // Post a new comment
+        function postComment() {
+            const codeId = parseInt(getUrlParameter('id'));
+            if (isNaN(codeId)) return;
+            
+            const commentInput = document.getElementById('comment-input');
+            const content = commentInput.value.trim();
+            
+            if (!content) {
+                alert('请输入评论内容');
+                return;
+            }
+            
+            // Create new comment
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false
+            };
+            
+            const newComment = {
+                author: '访客',
+                date: now.toLocaleString('zh-CN', options),
+                content: content
+            };
+            
+            // Save to localStorage
+            const commentsKey = `comments_${codeId}`;
+            const savedComments = localStorage.getItem(commentsKey);
+            const comments = savedComments ? JSON.parse(savedComments) : [];
+            
+            comments.push(newComment);
+            localStorage.setItem(commentsKey, JSON.stringify(comments));
+            
+            // Update UI
+            renderComments(comments);
+            commentInput.value = '';
+        }
+        
+        // Show error message
+        function showError(message) {
+            const mainContent = document.querySelector('main .max-w-4xl');
+            mainContent.innerHTML = `
+                <div class="glass rounded-lg p-8 text-center">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 text-4xl mb-4"></i>
+                    <h2 class="text-2xl font-bold mb-4">出错了</h2>
+                    <p class="text-gray-300 mb-6">${message}</p>
+                    <a href="index.html" class="inline-flex items-center px-6 py-3 bg-secondary text-dark font-semibold rounded-md hover:bg-opacity-90 transition-colors duration-300">
+                        <i class="fa fa-arrow-left mr-2"></i> 返回主页
+                    </a>
+                </div>
+            `;
+        }
+        
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-CN', options);
+        }
+        
+        // Copy code to clipboard
+        function copyCode() {
+            const codeContent = document.getElementById('code-content').innerText;
+            navigator.clipboard.writeText(codeContent).then(() => {
+                const copyButton = document.querySelector('.copy-button');
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fa fa-check mr-1"></i> 已复制';
+                copyButton.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            });
+        }
+        
+        // Toggle hidden page
+        function toggleHiddenPage() {
+            const mainPage = document.getElementById('main-page');
+            const hiddenPage = document.getElementById('hidden-page');
+            
+            if (hiddenPage.style.display === 'block') {
+                hiddenPage.style.display = 'none';
+                mainPage.style.display = 'flex';
+                document.body.style.overflow = 'auto';
+            } else {
+                hiddenPage.style.display = 'block';
+                mainPage.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    </script>
+</body>
+</html>
